@@ -26,12 +26,12 @@ def fetch_raw_data():
             engine = create_engine(DATABASE_URL)  
 
             df = pd.read_sql("SELECT * FROM ai_job_raw_dataset", con=engine)
-            print(df.head())
+            return df
 
         except Exception as e:
              print(e)
              print("somthing went wrong !!")
-        return True
+        
 
 
 def push_df_to_neon(df,table_name):
@@ -47,3 +47,5 @@ def push_df_to_neon(df,table_name):
         print(e)
 
     return True
+
+
