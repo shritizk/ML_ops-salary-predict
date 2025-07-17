@@ -6,11 +6,29 @@ from config import DATABASE_URL
 
 def raw_data_pushing():
     
-    df = pd.read_csv("ai_job_dataset.csv")
+    try:
+        df = pd.read_csv("ai_job_dataset.csv")
 
-    engine = create_engine(DATABASE_URL)  
+        engine = create_engine(DATABASE_URL)  
 
-    df.to_sql("ai_job_raw_dataset",engine,if_exists="replace",index=False)  
+        df.to_sql("ai_job_raw_dataset",engine,if_exists="replace",index=False)  
+        print("raw data is pushed !!")
+    except Exception as e  :
+        print("something went wrong !!\n")
+        print(e)
+
     return True
 
-raw_data_pushing()
+
+def fetch_raw_data():
+
+        try:
+            engine = create_engine(DATABASE_URL)  
+
+            df = pd.read_sql("SELECT * FROM ai_job_raw_dataset", con=engine)
+            print(df.head())
+
+        except Exception as e:
+             print(e)
+             print("somthing went wrong !!")
+
