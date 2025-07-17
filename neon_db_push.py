@@ -31,4 +31,19 @@ def fetch_raw_data():
         except Exception as e:
              print(e)
              print("somthing went wrong !!")
+        return True
 
+
+def push_df_to_neon(df,table_name):
+      
+    try:
+
+        engine = create_engine(DATABASE_URL)  
+
+        df.to_sql(table_name,engine,if_exists="replace",index=False)  
+        print("raw data is pushed !!")
+    except Exception as e  :
+        print("something went wrong !!\n")
+        print(e)
+
+    return True
