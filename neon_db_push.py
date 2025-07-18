@@ -41,7 +41,7 @@ def push_df_to_neon(df,table_name):
         engine = create_engine(DATABASE_URL)  
 
         df.to_sql(table_name,engine,if_exists="replace",index=False)  
-        print("raw data is pushed !!")
+        print("df data is pushed !!")
     except Exception as e  :
         print("something went wrong !!\n")
         print(e)
