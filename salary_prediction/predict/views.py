@@ -46,6 +46,7 @@ def predict_salar_with_linear_regression(request):
                 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
                 salary_predictor_path = os.path.join(BASE_DIR, 'salary_predictor.pkl')
                 encoder_path = os.path.join(BASE_DIR, 'encoder.pkl')
+
                 with open(salary_predictor_path, "rb") as file:
                     salary_predict_pkl = joblib.load(file)
                 with open(encoder_path, "rb") as file:
@@ -79,7 +80,21 @@ def predict_salar_with_linear_regression(request):
 
                 # Then use this pipeline to predict on your processed input dataframe
                 prediction = round(xgb_pipeline.predict(input_df)[0], 2)
-                
+
+            case "decision tree":
+                BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+                tree_model_path = os.path.join(BASE_DIR, 'amit_model.pkl')
+                tree_encoder_path = os.path.join(BASE_DIR, 'amit_encoder.pkl')
+                tree_model = joblib.load(tree_model_path)
+                encoders = joblib.load(tree_encoder_path)
+
+                for col in cat_df.columns:
+                    cat_df[col] = encoders[col].transform(cat_df[col])
+
+                input_df = pd.concat([cat_df, num_df], axis=1)
+
+                prediction = round(tree_model.predict(input_df)[0], 2)
+                print(prediction)
             
         print("Prediction:", prediction)
 
