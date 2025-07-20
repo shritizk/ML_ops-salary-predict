@@ -1,2 +1,6 @@
-__pycache__
+# Ignore Python cache
+__pycache__/
+*.pyc
+
+# Ignore virtual environment folder
 solo_pro

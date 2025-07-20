@@ -1,7 +1,9 @@
 from django.contrib import admin
 from django.urls import path ,include
-from views import *
+from . import views
 urlpatterns = [
-    path('lr/', predict_salar_with_linear_regression),
+    path('',views.home),
+    path('form',views.form),
+    path('lr', views.predict_salar_with_linear_regression),
     
 ]
