@@ -44,28 +44,18 @@ def predict_salar_with_linear_regression(request):
         match algo_selected:
             case "linear":
                 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-                salary_predictor_path = os.path.join(BASE_DIR, 'salary_predictor.pkl')
-                encoder_path = os.path.join(BASE_DIR, 'encoder.pkl')
+                salary_predictor_path = os.path.join(BASE_DIR, 'linear_regression_pipeline.pkl')
+                
 
                 with open(salary_predictor_path, "rb") as file:
-                    salary_predict_pkl = joblib.load(file)
-                with open(encoder_path, "rb") as file:
-                    enc_pkl = joblib.load(file)
-                # Transform categorical input with encoder
-                encoded_cat = enc_pkl.transform(cat_df)
-                # Convert sparse matrix to dense array
-                encoded_cat_array = encoded_cat.toarray()
-                # Get feature names after encoding
-                feature_names = enc_pkl.get_feature_names_out(cat_df.columns)
+                    pipeline_pkl = joblib.load(file)
 
-                # Create DataFrame from encoded categorical features with proper columns
-                encoded_cat_df = pd.DataFrame(encoded_cat_array, columns=feature_names)
 
-                # Combine encoded categorical features with numerical features
-                input_df = pd.concat([encoded_cat_df, num_df], axis=1)
 
-                # Predict salary
-                pred = salary_predict_pkl.predict(input_df)
+                input_df = pd.concat([cat_df, num_df], axis=1)
+
+                pred = pipeline_pkl.predict(input_df)
+
                 prediction = round(pred[0], 2)
 
             case "xgboost":
