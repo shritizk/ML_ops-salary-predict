@@ -73,7 +73,7 @@ def predict_salar_with_linear_regression(request):
 
             case "decision tree":
                 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-                tree_model_path = os.path.join(BASE_DIR, 'amit_model.pkl')
+                tree_model_path = os.path.join(BASE_DIR, 'amit_decision_tree_model.pkl')
                 tree_encoder_path = os.path.join(BASE_DIR, 'amit_encoder.pkl')
                 tree_model = joblib.load(tree_model_path)
                 encoders = joblib.load(tree_encoder_path)
