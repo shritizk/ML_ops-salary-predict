@@ -21,7 +21,7 @@ def predict_salar_with_linear_regression(request):
         numerical_features = {
             'remote_ratio': float(request.POST.get('remote_ratio', 0)),
             'years_experience': float(request.POST.get('years_experience', 0)),
-            'job_description_length': float(request.POST.get('job_description_length', 0)),
+            'job_description_length': 2500,
             'benefits_score': float(request.POST.get('benefits_score', 0)),
         }
 
@@ -95,6 +95,32 @@ def predict_salar_with_linear_regression(request):
 
                 prediction = round(tree_model.predict(input_df)[0], 2)
                 print(prediction)
+            case "random forest":
+                BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+                rf_pipeline_path = os.path.join(BASE_DIR, 'rf_regressor_pipeline.pkl')
+                rf_pipeline = joblib.load(rf_pipeline_path)
+
+                # Set default/fixed values
+                fixed_features = {
+                    "job_description_length": 2500,            # same as other models
+                    "days_open": 7,                            # arbitrary default
+                    "is_remote": 1 if numerical_features["remote_ratio"] >= 50 else 0,
+                    "salary_currency": "USD"                   # model trained on USD
+                }
+
+                # Merge all features
+                full_input = {
+                    **numerical_features,
+                    **categorical_features,
+                    **fixed_features
+                }
+
+                # Final column order must match training columns
+                input_df = pd.DataFrame([full_input])
+
+                # Predict
+                prediction = round(rf_pipeline.predict(input_df)[0], 2)
+
             
         print("Prediction:", prediction)
 
