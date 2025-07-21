@@ -43,6 +43,7 @@ def predict_salar_with_linear_regression(request):
         algo_selected = request.POST.get("algorithm")
         match algo_selected:
             case "linear":
+                btn_text = "0.84%"
                 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
                 salary_predictor_path = os.path.join(BASE_DIR, 'linear_regression_pipeline.pkl')
                 
@@ -59,6 +60,7 @@ def predict_salar_with_linear_regression(request):
                 prediction = round(pred[0], 2)
 
             case "xgboost":
+                btn_text = "0.88%"
                 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
                 xgb_pipeline_path = os.path.join(BASE_DIR, 'xgboost_salary_model.pkl')
 
@@ -72,6 +74,7 @@ def predict_salar_with_linear_regression(request):
                 prediction = round(xgb_pipeline.predict(input_df)[0], 2)
 
             case "decision tree":
+                btn_text = "0.83%"
                 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
                 tree_model_path = os.path.join(BASE_DIR, 'amit_decision_tree_model.pkl')
                 tree_encoder_path = os.path.join(BASE_DIR, 'amit_encoder.pkl')
@@ -86,6 +89,8 @@ def predict_salar_with_linear_regression(request):
                 prediction = round(tree_model.predict(input_df)[0], 2)
                 print(prediction)
             case "random forest":
+                btn_text = "0.85%"
+                
                 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
                 rf_pipeline_path = os.path.join(BASE_DIR, 'rf_regressor_pipeline.pkl')
                 rf_pipeline = joblib.load(rf_pipeline_path)
@@ -115,7 +120,7 @@ def predict_salar_with_linear_regression(request):
         print("Prediction:", prediction)
 
         
-        return render(request, "form.html", {"predicted_salary": prediction})
+        return render(request, "form.html", {"predicted_salary": prediction , "button_text": btn_text})
     except Exception as e:
         print("Error during prediction:", e)
         return render(request, "form.html", {"error": f"Prediction failed: {e}"})
